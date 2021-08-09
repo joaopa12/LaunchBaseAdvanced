@@ -43,23 +43,7 @@ module.exports = {
             console.error(err)
         }
     },
-    async update(id, fields) {
-        let query = "UPDATE users SET"
-
-        Object.keys(fields).map((key, index, array) => {
-            if ((index + 1) < array.length) {
-                query = `${query} ${key} = '${fields[key]}',`
-            } else {
-                // last iteration
-                query = `${query} ${key} = '${fields[key]}'
-              WHERE id = ${id}
-              `
-            }
-        })
-
-        await db.query(query)
-        return
-    },
+   
     async delete(id) {
         //pegar todos os produtos
         let results = await db.query("SELECT * FROM products WHERE user_id = $1",[id])
