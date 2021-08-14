@@ -59,11 +59,10 @@ async function createProducts(){
             path:`public/images/placeholder.png`,
             product_id: productsIds[Math.floor(Math.random() * totalProducts)]  
         })
-
+    }
     const filesPromise = files.map(file => File.create(file))
 
     await Promise.all(filesPromise)
-    }
 }
 
 async function init(){

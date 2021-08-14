@@ -54,8 +54,7 @@ module.exports = {
     async show(req, res) {
         try {
             const product = await Product.find(req.params.id)
-
-
+           
             if (!product) return res.send("Product Not Found!")
 
             const { day, hour, minutes, month } = date(product.updated_at)
@@ -64,15 +63,18 @@ module.exports = {
                 day: `${day}/${month}`,
                 hour: `${hour}:${minutes}`,
             }
-
+     
             product.oldPrice = formatPrice(product.old_price)
             product.price = formatPrice(product.price)
-
+            
+            
             let files = await Product.files(product.id)
             files = files.map(file => ({
                 ...file,
                 src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
             }))
+
+           
 
             return res.render('products/show', { product, files })
         } catch (error) {
