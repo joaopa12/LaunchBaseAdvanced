@@ -1,3 +1,5 @@
+const { unlinkSync } = require('fs')
+
 const Category = require("../models/Category")
 const Product = require("../models/Product")
 const File = require("../models/File")
@@ -41,7 +43,7 @@ module.exports = {
                 status: status || 1
             })
 
-            const filesPromise = req.files.map(file => File.create({ ...file, product_id }))
+            const filesPromise = req.files.map(file => File.create({ name: file.filename, path: file.path, product_id }))
 
             await Promise.all(filesPromise)
 
@@ -54,7 +56,7 @@ module.exports = {
     async show(req, res) {
         try {
             const product = await Product.find(req.params.id)
-           
+
             if (!product) return res.send("Product Not Found!")
 
             const { day, hour, minutes, month } = date(product.updated_at)
@@ -63,18 +65,18 @@ module.exports = {
                 day: `${day}/${month}`,
                 hour: `${hour}:${minutes}`,
             }
-     
+
             product.oldPrice = formatPrice(product.old_price)
             product.price = formatPrice(product.price)
-            
-            
+
+
             let files = await Product.files(product.id)
             files = files.map(file => ({
                 ...file,
                 src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
             }))
 
-           
+
 
             return res.render('products/show', { product, files })
         } catch (error) {
@@ -112,64 +114,76 @@ module.exports = {
             const keys = Object.keys(req.body)
 
 
-        for (key of keys) {
-            if (req.body[key] == "" && key != "removed_files") {
-                return res.send("porfavor preencha todos os campos")
+            for (key of keys) {
+                if (req.body[key] == "" && key != "removed_files") {
+                    return res.send("porfavor preencha todos os campos")
+                }
             }
-        }
 
-        if (req.files.length != 0) {
-            // validar se já não existem 6 imagens no total
-            const oldFiles = await Product.files(req.body.id)
-            const totalFiles = oldFiles.rows.length + req.files.length
+            if (req.files.length != 0) {
+                // validar se já não existem 6 imagens no total
+                const oldFiles = await Product.files(req.body.id)
+                const totalFiles = oldFiles.rows.length + req.files.length
 
-            if (totalFiles <= 6) {
-                const newFilesPromise = req.files.map(file => File.create({ ...file, product_id: req.body.id }))
+                if (totalFiles <= 6) {
+                    const newFilesPromise = req.files.map(file => File.create({ ...file, product_id: req.body.id }))
 
-                await Promise.all(newFilesPromise)
+                    await Promise.all(newFilesPromise)
+                }
             }
-        }
 
-        if (req.body.removed_files) {
-            const removedFiles = req.body.removed_files.split(",") //[1,2,3,]
-            //console.log(removedFiles)//
-            const lastIndex = (removedFiles.length - 1)
-            //console.log(lastIndex)
-            removedFiles.splice(lastIndex, 1) // [1,2,3]
-            //console.log(removedFiles)
-            const removedFilesPromise = removedFiles.map(id => File.delete(id))
+            if (req.body.removed_files) {
+                const removedFiles = req.body.removed_files.split(",") //[1,2,3,]
+                //console.log(removedFiles)//
+                const lastIndex = (removedFiles.length - 1)
+                //console.log(lastIndex)
+                removedFiles.splice(lastIndex, 1) // [1,2,3]
+                //console.log(removedFiles)
+                const removedFilesPromise = removedFiles.map(id => File.delete(id))
 
 
-            await Promise.all(removedFilesPromise)
-        }
+                await Promise.all(removedFilesPromise)
+            }
 
-        req.body.price = req.body.price.replace(/\D/g, "")
+            req.body.price = req.body.price.replace(/\D/g, "")
 
-        if (req.body.old_price != req.body.price) {
-            const oldProduct = await Product.find(req.body.id)
+            if (req.body.old_price != req.body.price) {
+                const oldProduct = await Product.find(req.body.id)
 
-            req.body.old_price = oldProduct.rows[0].price
-        }
+                req.body.old_price = oldProduct.price
+            }
 
-        await Product.update(req.body.id,{
-            category_id: req.body.category_id,
-            name: req.body.name,
-            description: req.body.description,
-            old_price: req.body.old_price,
-            price: req.body.price,
-            quantity: req.body.quantity,
-            status: req.body.status,
-        })
+            await Product.update(req.body.id, {
+                category_id: req.body.category_id,
+                name: req.body.name,
+                description: req.body.description,
+                old_price: req.body.old_price,
+                price: req.body.price,
+                quantity: req.body.quantity,
+                status: req.body.status,
+            })
 
-        return res.redirect(`/products/${req.body.id}`)
+            return res.redirect(`/products/${req.body.id}`)
         } catch (error) {
             console.error(error);
         }
-        
+
 
     },
     async delete(req, res) {
+        
+        const files = await Product.files(req.body.id)
+
         await Product.delete(req.body.id)
+
+        files.map(file => {
+            try {
+                unlinkSync(file.path)
+            } catch (err) {
+                console.error(err)
+            }
+        })
+        
 
         return res.redirect('products/create')
     }
