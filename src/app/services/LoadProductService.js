@@ -6,14 +6,14 @@ async function getImage(productId) {
     let files = await Product.files(productId)
     files = files.map(file => ({
         ...file,
-        src: `${file.path.replace("public", "").replace(/\\/g, "/")}`
+        src: `${file.path.replace("public", "")}`
     }))
 
     return files
 }
 
 async function format(product) {
-    const files = await getImage(product.id)
+    const files = await getImage(product.id)    
     product.img = files[0].src
     product.files = files
     product.formatedPrice = formatPrice(product.price)
@@ -35,7 +35,7 @@ const LoadService = {
 
         return this[service]()
     },
-    product() {
+    async product() {
         try {
             const product = await Product.findOne(this.filter)
 
@@ -44,7 +44,7 @@ const LoadService = {
             console.log(error)
         }
     },
-    products() {
+    async products() {
         try {
             const products = await Product.findAll(this.filter)
 
@@ -55,7 +55,7 @@ const LoadService = {
             console.error(error)
         }
     },
-    format
+    format,
 }
 
 module.exports = LoadService
