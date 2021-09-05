@@ -58,10 +58,7 @@ module.exports = {
         try {
             const product = await LoadProductService.load('product', {
                 where:{ id:req.params.id }
-            })
-            if (!product) return res.send("Product Not Found!")
-
-           
+            })           
 
             return res.render('products/show', { product })
         } catch (error) {
@@ -70,25 +67,14 @@ module.exports = {
     },
     async edit(req, res) {
         try {
-            const product = await Product.find(req.params.id)
-
-            if (!product) return res.send('product not found!')
-
-            product.old_price = formatPrice(product.old_price)
-            product.price = formatPrice(product.price)
+            const product = await LoadProductService.load('product', {
+                where:{ id:req.params.id }
+            })
 
             // get categories
-
             const categories = await Category.findAll()
 
-            // get images
-            let files = await Product.files(product.id)
-            files = files.map(file => ({
-                ...file,
-                src: `${req.protocol}://${req.headers.host}${file.path.replace("public", "")}`
-            }))
-
-            return res.render("products/edit", { product, categories, files })
+            return res.render("products/edit", { product, categories })
         } catch (error) {
             console.error(error);
         }
