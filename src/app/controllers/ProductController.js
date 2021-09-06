@@ -4,7 +4,6 @@ const Category = require("../models/Category")
 const Product = require("../models/Product")
 const File = require("../models/File")
 const LoadProductService = require('../services/LoadProductService')
-const { formatPrice, date } = require('../../lib/utils')
 
 module.exports = {
     async create(req, res) {
