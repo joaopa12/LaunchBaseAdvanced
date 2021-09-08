@@ -7,9 +7,11 @@ async function post(req, res, next){
         }
     }
 
-    if (req.files.length == 0) {
+    if (!req.files || req.files.length == 0) {
         return res.send('Porfavor, envie pelo menos 1 imagem.')
     }
+
+    next()
 }
 
 module.exports = {
