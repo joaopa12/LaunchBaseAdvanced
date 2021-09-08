@@ -16,18 +16,6 @@ module.exports = {
     },
     async post(req, res) {
         try {
-            const keys = Object.keys(req.body)
-
-            for (key of keys) { 
-                if (req.body[key] == "") {
-                    return res.send("porfavor preencha todos os campos")
-                }
-            }
-
-            if (req.files.length == 0) {
-                return res.send('Porfavor, envie pelo menos 1 imagem.')
-            }
-
             let { category_id, name, description, old_price, price, quantity, status } = req.body
 
             price = price.replace(/\D/g, "")
