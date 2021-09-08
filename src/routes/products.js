@@ -17,7 +17,7 @@ routes.get("/:id", ProductController.show)
 routes.get("/:id/edit", onlyUsers, ProductController.edit)
 
 routes.post("/", onlyUsers, multer.array("photos", 6),Validator.post,ProductController.post)
-routes.put("/", onlyUsers, multer.array("photos", 6),Validator.post, ProductController.put)
+routes.put("/", onlyUsers, multer.array("photos", 6),Validator.put, ProductController.put)
 routes.delete("/", onlyUsers, ProductController.delete)
 
 module.exports = routes

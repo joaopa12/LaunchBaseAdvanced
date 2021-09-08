@@ -69,15 +69,6 @@ module.exports = {
     },
     async put(req, res) {
         try {
-            const keys = Object.keys(req.body)
-
-
-            for (key of keys) {
-                if (req.body[key] == "" && key != "removed_files") {
-                    return res.send("porfavor preencha todos os campos")
-                }
-            }
-
             if (req.files.length != 0) {
                 // validar se já não existem 6 imagens no total
                 const oldFiles = await Product.files(req.body.id)
