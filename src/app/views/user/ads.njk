@@ -1,35 +1,25 @@
 {% extends "layout.njk" %}
-
+{% import "parts/card.njk" as cards %}
 {% block content %}
+    {% call cards.render('Meus Anúncios', 'users-ads container') %}
+    <div class="items">
+        {% for product in products %}
+            <div class="item">
 
-    <section class="user-dashboard container form">
+                <div class="image" style="background-image: url({{ product.img }})"></div>
 
-        <form method="POST" action="/users?_method=PUT">
-            <div class="header">
-                <h3>Detalhes</h3>
+                <div class="info">
+                    <div class="title">{{product.name}}</div>
+                    <div class="price">{{product.formatedPrice}}</div>
+                    <div class="published">Publicado em {{product.formatedCreatedAt}}</div>
+                </div>
+
+                <div class="actions">
+                    <a href="/products/{{product.id}}/edit">Editar</a>
+                    <a href="/products/{{product.id}}">Ver</a>
+                </div>
             </div>
-
-            <div class="fields">
-                {% include 'user/fields.njk'%}
-                <input type="hidden" name="id" value="{{ user.id }}">
-            </div>
-
-            <button class="button edit">Atualizar</button>
-        </form>
-
-        <form id="form-delete" action="/users?_method=DELETE" method="post">
-            <input type="hidden" name="id" value="{{ user.id }}">
-            <button class="button delete" type="submit">Deletar</button>
-        </form>
-
-        <script>
-            const formDelete = document.querySelector("#form-delete")
-            formDelete.addEventListener("submit", function (event) {
-                const confirmation = confirm("Tem certeza que deseja excluir sua conta , é uma ação irreversivel")
-                if (!confirmation) {
-                    event.preventDefault()
-                }
-            })
-        </script>
-    </section>
+        {% endfor %}
+    </div>
+    {% endcall %}
 {% endblock content %}
