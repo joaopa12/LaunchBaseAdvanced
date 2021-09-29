@@ -12,12 +12,14 @@
                     <div class="title">{{product.name}}</div>
                     <div class="price">{{product.formatedPrice}}</div>
                     <div class="published">Publicado em {{product.formatedCreatedAt}}</div>
-                </div>
 
-                <div class="actions">
+                    <div class="actions">
                     <a href="/products/{{product.id}}/edit">Editar</a>
                     <a href="/products/{{product.id}}">Ver</a>
+                    </div>
                 </div>
+
+               
             </div>
         {% endfor %}
     </div>

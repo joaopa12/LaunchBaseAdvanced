@@ -532,20 +532,6 @@ form .item #photos-preview img {
     transition: 200ms;
 }
 
-/* user register */
-
-.user-register.container.form {
-    max-width: 500px;
-}
-/*
-.form input[name="email"],
-.form input[name="password"],
-.form input[name="passwordRepeat"],
-.form input[name="cpf_cnpj"],
-.form input[name="cep"]{
-    max-width: 60%;
-}
-*/
 /* validate error */
 .input .error{
     background-color: #e74c3c;
