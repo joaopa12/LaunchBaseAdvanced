@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% import "parts/card.njk" as card %}
 {% block content %}
-    {% call card.render('Detalhes', 'password container') %}
+    {% call card.render('Detalhes', 'users-dashboard container') %}
     <form method="POST" action="/users?_method=PUT">
         
         <div class="fields">

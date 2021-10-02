@@ -149,6 +149,7 @@
     letter-spacing: .4px;
 }
 
-.product-create {
+.product-create,
+.users-dashboard {
     max-width: 650px;
 }
