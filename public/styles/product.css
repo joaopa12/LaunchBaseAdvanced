@@ -1,16 +1,8 @@
-.product-single {
-    background-color: white;
+.product-single .card-content {
     display: grid;
     grid-template-columns:1fr 1fr;
     grid-gap: 24px;
 
-    padding: 32px 24px;
-    margin: 32px auto;
-
-    box-shadow: 2px 2px 2px -4px rgba(63, 63, 63,.5);
-    border: 1px solid #efefef;
-    
-    border-radius: 4px;
 }
 /* product single gallery */
 .product-single .gallery {
@@ -158,5 +150,5 @@
 }
 
 .product-create {
-    max-width: 500px;
+    max-width: 650px;
 }
