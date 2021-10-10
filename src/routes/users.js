@@ -30,6 +30,6 @@ routes.put('/', UserValidator.update ,UserController.update)
 routes.delete('/', UserController.delete)
 
 routes.get('/ads', UserController.ads)
-routes.post('/orders', OrderController.post)
+routes.post('/orders',onlyUsers, OrderController.post)
 
 module.exports = routes
