@@ -1,5 +1,5 @@
 const LoadProductsService = require('../services/LoadProductService')
-const User = require('../../app/controllers/UserController')
+const User = require('../../app/models/User')
 
 const mailer = require('../../lib/mailer')
 const Base = require('../models/Base')
@@ -33,7 +33,7 @@ module.exports = {
            const seller = await User.findOne({ where: {id: product.user_id }})
 
            // os dados do comprador
-           const buyer = await User.findOne({ wher: { id: req.session.userId}})
+           const buyer = await User.findOne({ where: { id: req.session.userId}})
 
            // enviar email com dados da compra para o vendedor 
            await mailer.sendMail({
