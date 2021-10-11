@@ -1,4 +1,5 @@
-.order-sucess {
+.order-sucess,
+.order-error {
     padding: 0;
     padding-bottom: 100px;
 
@@ -11,6 +12,15 @@
     height: 250px;
 }
 
+.order-error .error-lottie{
+    height: 350px;
+}
+
 .order-sucess a{
     color: var(--secondary-color);
 }
+
+.order-error a{
+    color: rgba(232, 102, 102, 0.693);
+}
+
