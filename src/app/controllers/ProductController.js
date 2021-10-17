@@ -72,10 +72,12 @@ module.exports = {
             if (req.files.length != 0) {
                 // validar se já não existem 6 imagens no total
                 const oldFiles = await Product.files(req.body.id)
-                const totalFiles = oldFiles.rows.length + req.files.length
-
+                const totalFiles = oldFiles.length + req.files.length
+                const productId = req.body.id
+            
                 if (totalFiles <= 6) {
-                    const newFilesPromise = req.files.map(file => File.create({ ...file, product_id: req.body.id }))
+                    const newFilesPromise = req.files.map(file => 
+                        File.create({ name: file.filename, path: file.path, product_id: productId }))
 
                     await Promise.all(newFilesPromise)
                 }
