@@ -31,7 +31,8 @@ module.exports = {
                 status: status || 1
             })
 
-            const filesPromise = req.files.map(file => File.create({ name: file.filename, path: file.path, product_id }))
+            const filesPromise = req.files.map(file => 
+                File.create({ name: file.filename, path: file.path, product_id }))
 
             await Promise.all(filesPromise)
 
